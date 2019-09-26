@@ -82,6 +82,32 @@ $(document).ready(function() {
         //$("#instructions").text(`Name: ${name}   Player ${currentPlayer}`);
     });
 
+    //Paper card was clicked
+    $("#paper-btn").on("click", function() {
+        event.preventDefault();
+
+        //Write selection
+        players[currentPlayer].selection = "p";
+        console.log(`Player: ${players[currentPlayer].player}   Selection: ${players[currentPlayer].selection}`);
+        
+        let winner = getWinner();
+        saveScore(winner);
+        //$("#instructions").text(`Name: ${name}   Player ${currentPlayer}`);
+    });
+
+    //Scissors card was clicked
+    $("#scissors-btn").on("click", function() {
+        event.preventDefault();
+
+        //Write selection
+        players[currentPlayer].selection = "s";
+        console.log(`Player: ${players[currentPlayer].player}   Selection: ${players[currentPlayer].selection}`);
+        
+        let winner = getWinner();
+        saveScore(winner);
+        //$("#instructions").text(`Name: ${name}   Player ${currentPlayer}`);
+    });
+
     function getWinner() {
         let winner = -1;
 
