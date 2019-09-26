@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <title>Rock, Paper, Scissors</title>
+
+        <!--Link to Bootstrap and CSS-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <!-- <link rel="stylesheet" href="assets/css/style.css"> -->
+        
+        <!-- JQuery -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <form id="rps-form">
+            <label for="name-input">Enter Your Name</label>
+            <input type="text" id="name-input"><br>
+      
+            <input id="username" type="submit" value="Submit">
+        </form>
+
+        <div id="instructions">Instructions: Enter your name to join the game.</div>
+
+        <div id="player-1"></div>
+
+        <div id="player-2"></div>
+
+        <button id="r-btn">Rock</button>
+        <button id="p-btn">Paper</button>
+        <button id="s-btn">Scissors</button>
+
+        <!-- Add link to the javascript -->
+        <script type="text/javascript" src="assets/javascript/rps.js"></script>
+
+        <!-- Firebase Core JavaScript Link -->
+        <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
+
+        <!-- Firebase Database -->
+        <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
+    </body>
+
+</html>
