@@ -43,14 +43,12 @@ $(document).ready(function() {
             selection: "",
             wins: 0,
             losses: 0,
-            ties: 0
+            ties: 0,
+            winner: 0
         };
 
         if (player === 1) {
             $("#instructions").text('Waiting for Player 2...');
-        }
-        else {
-            writeScores();
         }
 
         players.push(newPlayer);
@@ -71,7 +69,8 @@ $(document).ready(function() {
             selection: player.selection,
             wins: player.wins,
             losses: player.losses,
-            ties: player.ties
+            ties: player.ties,
+            winner: player.winner
         });
     }
 
@@ -84,10 +83,8 @@ $(document).ready(function() {
         //Write selection
         players[currentPlayer].selection = "r";
         console.log(`Player: ${players[currentPlayer].player}   Selection: ${players[currentPlayer].selection}`);
-        
+
         processSelection(currentPlayer)
-        
-        //$("#instructions").text(`Name: ${name}   Player ${currentPlayer}`);
     });
 
     //Paper card was clicked
@@ -101,8 +98,6 @@ $(document).ready(function() {
         console.log(`Player: ${players[currentPlayer].player}   Selection: ${players[currentPlayer].selection}`);
 
         processSelection(currentPlayer)
-
-        //$("#instructions").text(`Name: ${name}   Player ${currentPlayer}`);
     });
 
     //Scissors card was clicked
@@ -116,22 +111,15 @@ $(document).ready(function() {
         console.log(`Player: ${players[currentPlayer].player}   Selection: ${players[currentPlayer].selection}`);
         
         processSelection(currentPlayer)
-
-        //$("#instructions").text(`Name: ${name}   Player ${currentPlayer}`);
     });
 
     function processSelection(currentPlayer) {
         let winner = getWinner();
         saveToFirebase(players[currentPlayer]);
 
-        if (winner === -1) {
-            $("#instructions").text('Ready to Play Player 2');
-        }
-        else {
+        if (winner !== -1) {
             saveScore(winner);
-            writeScores();
             resetScores();
-            $("#instructions").text('Ready to Play Player 1');
         }
     }
 
@@ -190,6 +178,8 @@ $(document).ready(function() {
                 // code block
         }
 
+        players[1].winner = winner;
+
         //Save Player 1
         saveToFirebase(players[1]);
 
@@ -207,13 +197,18 @@ $(document).ready(function() {
                 // code block
         }
 
+        players[2].winner = winner;
+
         //Save Player 2
         saveToFirebase(players[2]);
     }
 
     function writeScores() {
-        const name = $('<h5>');
-        name.html(`Name: ${players[1].name}`);
+        $('#player-1').empty();
+        $('#player-2').empty();
+        $('#player-1').html('Player 1:')
+        $('#player-2').html('Player 2:')
+
         const wins = $('<h5>');
         wins.html(`Wins: ${players[1].wins}`);
         const losses = $('<h5>');
@@ -221,13 +216,10 @@ $(document).ready(function() {
         const ties = $('<h5>');
         ties.html(`Ties: ${players[1].ties}`);
 
-        $('#player-1').append(name);
         $('#player-1').append(wins);
         $('#player-1').append(losses);
         $('#player-1').append(ties);
 
-        const name2 = $('<h5>');
-        name2.html(`Name: ${players[2].name}`);
         const wins2 = $('<h5>');
         wins2.html(`Wins: ${players[2].wins}`);
         const losses2 = $('<h5>');
@@ -235,10 +227,23 @@ $(document).ready(function() {
         const ties2 = $('<h5>');
         ties2.html(`Ties: ${players[2].ties}`);
 
-        $('#player-2').append(name2);
         $('#player-2').append(wins2);
         $('#player-2').append(losses2);
         $('#player-2').append(ties2);
+
+        if (players[1].selection === "") {
+            $("#instructions").text(`${players[1].name}, please click a button`);
+        }
+        else {
+            $("#instructions").text(`${players[2].name}, please click a button`);
+        }
+
+        if (players[2].selection !== "") {
+            $("#message").text(`Winner is ${players[1].winner}!!`);
+        }
+        else {
+            $("#message").empty();
+        }
     }
 
     function resetScores() {
@@ -275,7 +280,8 @@ $(document).ready(function() {
                     selection: childData.selection,
                     wins: childData.wins,
                     losses: childData.losses,
-                    ties: childData.ties
+                    ties: childData.ties,
+                    winner: childData.winner
                 });
             });
 
@@ -284,7 +290,7 @@ $(document).ready(function() {
                 $('#rock-btn').removeAttr("disabled")
                 $('#paper-btn').removeAttr("disabled")
                 $('#scissors-btn').removeAttr("disabled")
-                $("#instructions").text('Ready to Play Player 1');
+                writeScores()
             }
         }
 
